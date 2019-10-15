@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+bool crossroad;
+broadcast chan pass;
+broadcast chan light;
+</declaration>
+	<template>
+		<name x="5" y="5">Car</name>
+		<declaration>// Place local declarations here.
+int count=0;
+clock x;</declaration>
+		<location id="id0" x="238" y="-8">
+			<name x="228" y="-42">passed</name>
+		</location>
+		<location id="id1" x="102" y="-76">
+			<name x="34" y="-102">crossing</name>
+			<label kind="invariant" x="92" y="-59">x&lt;=5</label>
+		</location>
+		<location id="id2" x="-25" y="-8">
+			<name x="-35" y="-42">Start</name>
+		</location>
+		<init ref="id2"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="119" y="-170">count++, crossroad=1</label>
+			<nail x="85" y="-170"/>
+			<nail x="170" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="34" y="-25">x=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Train</name>
+		<declaration>int count=0;
+clock y;</declaration>
+		<location id="id3" x="119" y="119">
+		</location>
+		<location id="id4" x="195" y="25">
+		</location>
+		<location id="id5" x="110" y="-59">
+			<name x="100" y="-93">SensorOn</name>
+		</location>
+		<location id="id6" x="0" y="0">
+			<name x="-10" y="-34">start</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="153" y="-42">pass!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+		</transition>
+	</template>
+	<template>
+		<name>Rail</name>
+		<location id="id7" x="161" y="0">
+		</location>
+		<location id="id8" x="85" y="-85">
+		</location>
+		<location id="id9" x="0" y="0">
+		</location>
+		<init ref="id9"/>
+	</template>
+	<system>// Place template instantiations here.
+Car = Car();
+Train = Train();
+Rail = Rail();
+// List one or more processes to be composed into a system.
+system Car, Train, Rail;
+    </system>
+	<queries>
+	</queries>
+</nta>
