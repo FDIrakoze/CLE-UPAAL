@@ -1,5 +1,5 @@
 Projet CLE UPAAL
 
 Binomial:
-    * Franco Davy Irakoze
-    * Jérémy Vienne
+- Franco Davy Irakoze
+- Jérémy Vienne
