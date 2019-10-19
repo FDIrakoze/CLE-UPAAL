@@ -3,6 +3,7 @@
 <nta>
 	<declaration>// Place global declarations here.
 bool crossroad;
+bool sensorOn;
 broadcast chan pass;
 broadcast chan light;
 </declaration>
@@ -25,6 +26,8 @@ clock x;</declaration>
 		<transition>
 			<source ref="id1"/>
 			<target ref="id0"/>
+			<label kind="guard" x="153" y="-68">count &lt;= 5, count &gt;= 2</label>
+			<label kind="assignment" x="119" y="-34">crossroad=0</label>
 		</transition>
 		<transition>
 			<source ref="id1"/>
@@ -36,6 +39,7 @@ clock x;</declaration>
 		<transition>
 			<source ref="id2"/>
 			<target ref="id1"/>
+			<label kind="synchronisation" x="-7" y="-59">light?</label>
 			<label kind="assignment" x="34" y="-25">x=0</label>
 		</transition>
 	</template>
@@ -43,36 +47,62 @@ clock x;</declaration>
 		<name>Train</name>
 		<declaration>int count=0;
 clock y;</declaration>
-		<location id="id3" x="119" y="119">
+		<location id="id3" x="229" y="42">
+			<name x="219" y="8">crossing</name>
+			<label kind="invariant" x="170" y="59">y &lt;= 30, y &gt;= 20</label>
 		</location>
-		<location id="id4" x="195" y="25">
+		<location id="id4" x="110" y="-127">
+			<name x="100" y="-161">SensorOn</name>
 		</location>
-		<location id="id5" x="110" y="-59">
-			<name x="100" y="-93">SensorOn</name>
-		</location>
-		<location id="id6" x="0" y="0">
+		<location id="id5" x="0" y="0">
 			<name x="-10" y="-34">start</name>
 		</location>
-		<init ref="id6"/>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="guard" x="17" y="42">count &gt;= 10, count &lt;= 20</label>
+			<label kind="synchronisation" x="34" y="8">pass!, light!</label>
+			<label kind="assignment" x="59" y="25">y = 0, sensorOn = 0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="314" y="110">count++</label>
+			<nail x="297" y="153"/>
+			<nail x="340" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="110" y="-59">y = 0</label>
+		</transition>
 		<transition>
 			<source ref="id5"/>
 			<target ref="id4"/>
-			<label kind="synchronisation" x="153" y="-42">pass!</label>
-		</transition>
-		<transition>
-			<source ref="id6"/>
-			<target ref="id5"/>
+			<label kind="assignment" x="-25" y="-85">sensorOn = 1</label>
 		</transition>
 	</template>
 	<template>
 		<name>Rail</name>
-		<location id="id7" x="161" y="0">
+		<location id="id6" x="212" y="-119">
+			<name x="202" y="-153">Closed</name>
 		</location>
-		<location id="id8" x="85" y="-85">
+		<location id="id7" x="0" y="0">
+			<name x="-10" y="-34">Open</name>
 		</location>
-		<location id="id9" x="0" y="0">
-		</location>
-		<init ref="id9"/>
+		<init ref="id7"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="153" y="34">pass?</label>
+			<nail x="170" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-42" y="-102">crossroad==0, sensorOn == 1</label>
+		</transition>
 	</template>
 	<system>// Place template instantiations here.
 Car = Car();
