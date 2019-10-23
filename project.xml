@@ -164,7 +164,7 @@ count = 0</label>
 			<target ref="id8"/>
 			<label kind="guard" x="-221" y="-442">crossroad==true and distanceTrain &gt;=10 and distanceTrain&lt;=15</label>
 			<label kind="synchronisation" x="93" y="-408">stuckCar!</label>
-			<nail x="204" y="-365"/>
+			<nail x="187" y="-374"/>
 		</transition>
 		<transition>
 			<source ref="id7"/>
