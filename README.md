@@ -88,3 +88,22 @@
 
     > - *** CheckIfCar to Closed *** :   
     `The train is arriving and there is no stuck car on the crossroad, so the gate can be closed.`
+
+
+### Vérification
+  ** Query **  
+  - `E<> train.StopTrain and rail.CarStuck` -> a state exist where the train will stop and a car is stuck
+
+  - `E<> train.crossing` -> a state exist where the train is crossing
+
+  - `E<> train.SensorOn` -> a state exist where the train approach the crossroad
+
+  - `E<> rail.StuckButCanPass and car.crossing and train.SensorOn` -> a state exist where a train is approching while a car is crossing the road but the train don't need to stop because the car have time to cross the road
+
+  - `E<> rail.Closed and train.crossing` -> a state exist where the train i crossing and the gate is closed
+
+  - `E<> rail.preOpen and not train.crossing` -> there isn't a state where the gate will open and the train is crossing
+
+  ** Can't verify  **
+
+  - `A[] train.crossing + car.crossing <= 1` -> while a train is crossing the car can't cross
