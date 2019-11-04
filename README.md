@@ -106,6 +106,9 @@
 
   - `A[] (car.crossing && car1.crossing) != true` only one car can cross at a time
 
+   - `A[] train.crossing imply rail.Closed` -> trains crossing imply that the rail is closed
+
+
   ** Can't verify  **
 
-  - `A[] (car.crossing || car1.crossing) && train.crossing) != true` -> while a train is crossing the car can't cross
+  - `A[] ((car.crossing || car1.crossing) && train.crossing) != true` -> while a train is crossing the car can't cross

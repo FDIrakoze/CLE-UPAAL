@@ -4,6 +4,8 @@
 	<declaration>// Place global declarations here.
 int distanceTrain;
 bool crossroad;
+bool trainCanCross = false;
+
 
 bool canPass = true; 
 broadcast chan pass;
@@ -30,7 +32,7 @@ int r; </declaration>
 			<source ref="id0"/>
 			<target ref="id1"/>
 			<label kind="guard" x="365" y="-127">count == r and canPass == false</label>
-			<label kind="synchronisation" x="331" y="-51">stuckCanPass!</label>
+			<label kind="synchronisation" x="331" y="-51">stuckCanPass?</label>
 			<label kind="assignment" x="340" y="-34">crossroad=false, count=0</label>
 			<nail x="289" y="-144"/>
 			<nail x="433" y="-85"/>
@@ -110,7 +112,7 @@ distanceTrain = r - count</label>
 			<source ref="id4"/>
 			<target ref="id3"/>
 			<label kind="select" x="212" y="-93">rand: int[10,20]</label>
-			<label kind="guard" x="212" y="-119">count == r and crossroad == false</label>
+			<label kind="guard" x="212" y="-119">count == r and crossroad == false and trainCanCross==true</label>
 			<label kind="assignment" x="221" y="-76">r2 = rand,
 count = 0</label>
 		</transition>
@@ -125,72 +127,54 @@ count = 0</label>
 	<template>
 		<name>Rail</name>
 		<declaration>int count = 0;</declaration>
-		<location id="id6" x="476" y="-238">
-			<name x="501" y="-229">StuckButCanPass</name>
-		</location>
-		<location id="id7" x="42" y="-238">
+		<location id="id6" x="42" y="-238">
 			<name x="-17" y="-272">CheckIfCar</name>
 		</location>
-		<location id="id8" x="289" y="-459">
+		<location id="id7" x="289" y="-459">
 			<name x="279" y="-493">CarStuck</name>
 		</location>
-		<location id="id9" x="204" y="-25">
-			<name x="170" y="0">preOpen</name>
-		</location>
-		<location id="id10" x="484" y="-25">
+		<location id="id8" x="484" y="-25">
 			<name x="492" y="-67">Closed</name>
 		</location>
-		<location id="id11" x="8" y="-25">
+		<location id="id9" x="8" y="-25">
 			<name x="-2" y="-59">Open</name>
 		</location>
-		<init ref="id11"/>
+		<init ref="id9"/>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id8"/>
-			<label kind="guard" x="357" y="-408">crossroad==true and distanceTrain &gt;=10 and distanceTrain&lt;=15</label>
-			<label kind="synchronisation" x="442" y="-365">stuckCar!</label>
+			<label kind="guard" x="357" y="-221">crossroad == true and distanceTrain &gt;15</label>
+			<label kind="synchronisation" x="493" y="-144">stuckCanPass!</label>
+			<nail x="221" y="-255"/>
 		</transition>
 		<transition>
 			<source ref="id6"/>
-			<target ref="id10"/>
-			<label kind="synchronisation" x="493" y="-144">stuckCanPass?</label>
-		</transition>
-		<transition>
-			<source ref="id7"/>
-			<target ref="id6"/>
-			<label kind="guard" x="144" y="-229">crossroad == true and distanceTrain &gt;15</label>
-			<nail x="399" y="-237"/>
-		</transition>
-		<transition>
-			<source ref="id7"/>
-			<target ref="id8"/>
+			<target ref="id7"/>
 			<label kind="guard" x="-221" y="-442">crossroad==true and distanceTrain &gt;=10 and distanceTrain&lt;=15</label>
 			<label kind="synchronisation" x="93" y="-408">stuckCar!</label>
 			<nail x="187" y="-374"/>
 		</transition>
 		<transition>
-			<source ref="id7"/>
-			<target ref="id10"/>
+			<source ref="id6"/>
+			<target ref="id8"/>
 			<label kind="guard" x="161" y="-110">crossroad==false</label>
+			<label kind="assignment" x="60" y="-131">trainCanCross=true</label>
 		</transition>
 		<transition>
-			<source ref="id11"/>
-			<target ref="id7"/>
+			<source ref="id9"/>
+			<target ref="id6"/>
 			<label kind="synchronisation" x="-34" y="-153">arriving?</label>
 			<label kind="assignment" x="-76" y="-136">canPass=false</label>
 			<nail x="25" y="-170"/>
 			<nail x="34" y="-212"/>
 		</transition>
 		<transition>
-			<source ref="id9"/>
-			<target ref="id11"/>
-			<label kind="assignment" x="42" y="-8">canPass=true</label>
-		</transition>
-		<transition>
-			<source ref="id10"/>
+			<source ref="id8"/>
 			<target ref="id9"/>
-			<label kind="synchronisation" x="314" y="-51">pass?</label>
-			<nail x="306" y="-25"/>
+			<label kind="synchronisation" x="322" y="-43">pass?</label>
+			<label kind="assignment" x="246" y="25">canPass=true, trainCanCross=false</label>
+			<nail x="314" y="-17"/>
+			<nail x="25" y="-26"/>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
@@ -204,8 +188,11 @@ system car, car1, train, rail;
     </system>
 	<queries>
 		<query>
-			<formula>A[] (car.crossing &amp;&amp; train.crossing) != true
-			</formula>
+			<formula></formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] train.crossing imply rail.Closed</formula>
 			<comment>
 			</comment>
 		</query>
