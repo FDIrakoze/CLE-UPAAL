@@ -29,8 +29,9 @@ int r; </declaration>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
-			<label kind="synchronisation" x="331" y="-51">stuckCanPass?</label>
-			<label kind="assignment" x="340" y="-34">crossroad=false</label>
+			<label kind="guard" x="365" y="-127">count == r and canPass == false</label>
+			<label kind="synchronisation" x="331" y="-51">stuckCanPass!</label>
+			<label kind="assignment" x="340" y="-34">crossroad=false, count=0</label>
 			<nail x="289" y="-144"/>
 			<nail x="433" y="-85"/>
 		</transition>
@@ -38,13 +39,13 @@ int r; </declaration>
 			<source ref="id0"/>
 			<target ref="id1"/>
 			<label kind="guard" x="-306" y="-187">count == r and canPass==true</label>
-			<label kind="assignment" x="-255" y="-178">crossroad=false</label>
+			<label kind="assignment" x="-255" y="-178">crossroad=false, count = 0</label>
 			<nail x="-246" y="-93"/>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id0"/>
-			<label kind="assignment" x="119" y="-315">count++, crossroad=true</label>
+			<label kind="assignment" x="119" y="-315">count++</label>
 			<nail x="85" y="-315"/>
 			<nail x="170" y="-272"/>
 		</transition>
@@ -52,8 +53,8 @@ int r; </declaration>
 			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="select" x="110" y="-136">rand: int[1,5]</label>
-			<label kind="guard" x="110" y="-110">canPass == true</label>
-			<label kind="assignment" x="127" y="-85">r = rand</label>
+			<label kind="guard" x="110" y="-110">canPass == true and crossroad == false</label>
+			<label kind="assignment" x="127" y="-85">r = rand, crossroad = true</label>
 		</transition>
 	</template>
 	<template>
@@ -96,6 +97,7 @@ distanceTrain = r - count</label>
 			<target ref="id5"/>
 			<label kind="guard" x="42" y="68">count == r2</label>
 			<label kind="synchronisation" x="59" y="34">pass!</label>
+			<label kind="assignment" x="18" y="21">count=0</label>
 		</transition>
 		<transition>
 			<source ref="id3"/>
@@ -108,7 +110,7 @@ distanceTrain = r - count</label>
 			<source ref="id4"/>
 			<target ref="id3"/>
 			<label kind="select" x="212" y="-93">rand: int[10,20]</label>
-			<label kind="guard" x="212" y="-119">count == r</label>
+			<label kind="guard" x="212" y="-119">count == r and crossroad == false</label>
 			<label kind="assignment" x="221" y="-76">r2 = rand,
 count = 0</label>
 		</transition>
@@ -151,7 +153,7 @@ count = 0</label>
 		<transition>
 			<source ref="id6"/>
 			<target ref="id10"/>
-			<label kind="synchronisation" x="493" y="-144">stuckCanPass!</label>
+			<label kind="synchronisation" x="493" y="-144">stuckCanPass?</label>
 		</transition>
 		<transition>
 			<source ref="id7"/>
@@ -169,7 +171,7 @@ count = 0</label>
 		<transition>
 			<source ref="id7"/>
 			<target ref="id10"/>
-			<label kind="guard" x="119" y="-136">crossroad==false</label>
+			<label kind="guard" x="161" y="-110">crossroad==false</label>
 		</transition>
 		<transition>
 			<source ref="id11"/>
@@ -182,7 +184,7 @@ count = 0</label>
 		<transition>
 			<source ref="id9"/>
 			<target ref="id11"/>
-			<label kind="assignment" x="18" y="42">canPass=true</label>
+			<label kind="assignment" x="42" y="-8">canPass=true</label>
 		</transition>
 		<transition>
 			<source ref="id10"/>
@@ -193,11 +195,19 @@ count = 0</label>
 	</template>
 	<system>// Place template instantiations here.
 car = Car();
+car1 = Car();
 train = Train();
 rail = Rail();
+
 // List one or more processes to be composed into a system.
-system car, train, rail;
+system car, car1, train, rail;
     </system>
 	<queries>
+		<query>
+			<formula>A[] (car.crossing &amp;&amp; train.crossing) != true
+			</formula>
+			<comment>
+			</comment>
+		</query>
 	</queries>
 </nta>

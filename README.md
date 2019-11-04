@@ -104,6 +104,8 @@
 
   - `E<> rail.preOpen and not train.crossing` -> there isn't a state where the gate will open and the train is crossing
 
+  - `A[] (car.crossing && car1.crossing) != true` only one car can cross at a time
+
   ** Can't verify  **
 
-  - `A[] train.crossing + car.crossing <= 1` -> while a train is crossing the car can't cross
+  - `A[] (car.crossing || car1.crossing) && train.crossing) != true` -> while a train is crossing the car can't cross
